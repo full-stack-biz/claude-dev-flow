@@ -1,0 +1,20 @@
+{
+  "name": "dev-flow",
+  "version": "1.0.2",
+  "description": "Manage project releases and versioning using semantic versioning with bracket-based freezing. Use when planning releases, bumping versions, managing changelogs, or coordinating multi-component project versions.",
+  "author": {
+    "name": "full-stack.biz"
+  },
+  "homepage": "https://github.com/full-stack-biz/claude-dev-flow",
+  "repository": "https://github.com/full-stack-biz/claude-dev-flow.git",
+  "license": "MIT",
+  "keywords": [
+    "release",
+    "versioning",
+    "semantic-versioning",
+    "changelog",
+    "versioning-strategy",
+    "monorepo",
+    "multi-component"
+  ]
+}
