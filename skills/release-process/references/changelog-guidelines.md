@@ -475,3 +475,51 @@ Before committing a release:
 - [ ] Date is in ISO format (YYYY-MM-DD)
 - [ ] Sections are in standard order: Added, Changed, Deprecated, Removed, Fixed, Security
 - [ ] Each entry is a clear action (starts with verb: "Add", "Fix", "Improve", etc.)
+
+## Pre-Release Versions
+
+Use pre-release versions for testing before a stable release. Format: `X.Y.Z-IDENTIFIER`
+
+### Pre-Release Identifiers
+
+| Version | Purpose | When to Use |
+|---------|---------|------------|
+| `X.Y.Z-alpha.1` | Early testing, unstable | Internal testing, feature incomplete |
+| `X.Y.Z-beta.1` | Stable testing, feature complete | Limited external testing, feedback gathering |
+| `X.Y.Z-rc.1` | Release candidate, ready for production | Final testing before stable release |
+| `X.Y.Z` | Stable release | Production deployment |
+
+### Example Pre-Release Progression
+
+```
+2.0.0-alpha.1  → Early testing of breaking changes
+2.0.0-beta.1   → More stable, migration guide ready
+2.0.0-rc.1     → Final testing, deployment procedure verified
+2.0.0          → Stable production release
+```
+
+### CHANGELOG for Pre-Releases
+
+Document pre-releases the same way as stable releases:
+
+```markdown
+## [2.0.0-rc.1] - 2026-01-21
+
+### Added
+- Migration guide for users upgrading from v1.x
+
+### Changed
+- **BREAKING**: API endpoint structure reorganized
+- **BREAKING**: Config format changed from YAML to JSON
+
+### Removed
+- Support for old YAML config format (use JSON instead)
+```
+
+### Rules for Pre-Release Versions
+
+1. **Don't mix pre-release and stable** — Each pre-release is separate from final stable
+2. **Increment pre-release identifier** — 2.0.0-alpha.1 → 2.0.0-alpha.2, not back to alpha.1
+3. **Document same as stable** — Pre-releases still get CHANGELOG entries
+4. **Test thoroughly before stable** — Pre-releases are for gathering feedback, not shipping
+5. **Mark breaking changes clearly** — Use **BREAKING** even in pre-releases

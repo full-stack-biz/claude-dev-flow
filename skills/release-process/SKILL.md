@@ -1,8 +1,8 @@
 ---
 name: release-process
 description: >-
-  Plan and execute semantic versioning releases using bracket-based freezing. Use when: planning a release, bumping versions, writing changelogs, coordinating multi-component projects, handling scope creep, or releasing plugins. Works for single projects, monorepos, plugins, and multi-component systems.
-version: 1.1.0
+  Plan and execute releases with semantic versioning and bracket-based freezing. Use when: "how do I release", "bump the version", "write the changelog", "what version comes next", "release the plugin", or managing scope creep in monorepos. Prevents version thrashing; supports single projects, monorepos, and multi-component systems.
+version: 1.0.2
 allowed-tools: Read,Write,Edit,Bash(git:*),Grep,Glob
 ---
 
@@ -18,9 +18,29 @@ Follow these steps in order. Use references for complex scenarios (scope creep, 
 
 What's changing? Pick ONE:
 
-- **Bug fixes, docs, wording only** → PATCH (bump Z: 1.0.2 → 1.0.3)
-- **New features (backward compatible)** → MINOR (bump Y, reset Z: 1.0.5 → 1.1.0)
-- **Breaking changes (incompatible)** → MAJOR (bump X, reset Y,Z: 1.5.2 → 2.0.0)
+**PATCH** (bump Z: 1.0.2 → 1.0.3) — Fixes, clarifications, no user-facing additions
+- Bug fixes in existing code
+- Documentation updates or rewording
+- Correcting typos and wording
+- Better examples or explanations of existing features
+- Improving performance (without API change)
+- Adding warnings/guardrails to existing functionality
+- Restructuring guides for clarity (same content)
+
+**MINOR** (bump Y, reset Z: 1.0.5 → 1.1.0) — New capabilities, backward compatible
+- New commands or features users can access
+- New tool access or permissions
+- New reference guides or entirely new sections
+- Expanding existing API with new methods
+- Adding completely new capabilities
+
+**MAJOR** (bump X, reset Y,Z: 1.5.2 → 2.0.0) — Breaking changes
+- Removing or renaming commands
+- Changing behavior incompatibly
+- Changing output format incompatibly
+- Restructuring that requires user migration
+
+⚠️ **Key distinction:** "Clarifying existing feature" (PATCH) ≠ "Adding new feature" (MINOR)
 
 ⚠️ **If uncertain:** Run `git diff` to see exact changes. Don't rely on memory.
 
@@ -55,20 +75,21 @@ grep -r '"version"' .
 
 Find and update EVERY file containing the version:
 
-```bash
-# Find all version locations
-grep -r "version" . --include="*.json" --include="*.toml" --include="*.py" --include="*.md"
-```
-
 **Common locations:**
 - `package.json` (Node.js) — `"version": "X.Y.Z"`
 - `Cargo.toml` (Rust) — `version = "X.Y.Z"`
 - `SKILL.md` (Claude) — `version: X.Y.Z` in frontmatter
 - Root `plugin.json` (plugins) — `"version": "X.Y.Z"`
 
+Use Grep to search across all files:
+1. Search for the old version number: `grep -r "X.Y.Z" .`
+2. Review results to identify all version references
+3. Update each file with the new version
+4. Verify: Search for the old version again; should return zero results
+
 **Multi-component rule:** If your project has children (skills, services), parent version ≥ highest child version.
 
-⚠️ **Error prevention:** After updating, run `grep -r "OLD_VERSION" .` to catch any you missed.
+⚠️ **Error prevention:** After updating, search again for the old version to catch any you missed.
 
 ### Step 5: Update CHANGELOG.md
 
@@ -125,21 +146,16 @@ git push origin vX.Y.Z  # if using remote
 
 ## Multi-Component Projects (Monorepos, Plugins)
 
-**Each component versions independently. Parent version ≥ highest child.**
+**Key rule:** Parent version ≥ highest child version. Only bump components that changed.
 
-Quick rule: Only update components that changed.
+**Example:** If plugin is 1.2.0 and skill-a gets a minor bump to 1.1.0, plugin must jump to 1.3.0 (stays ≥ 1.1.0).
 
-**Example:**
-```
-Before: plugin 1.2.0, skill-a 1.0.0, skill-b 1.0.0
-Change: skill-a gets new feature only
-After:  plugin 1.3.0, skill-a 1.1.0, skill-b 1.0.0 (unchanged)
-
-Why plugin jumped to 1.3.0? Because skill-a is now 1.1.0,
-and parent must be ≥ highest child.
+**Detect changed components:**
+```bash
+git diff HEAD~1 --name-only  # See all changed files since last commit
 ```
 
-See `references/project-structures.md` for detailed multi-component examples.
+Version only the components in that list. See `references/project-structures.md` for detailed examples.
 
 ## Common Release Patterns
 
@@ -198,24 +214,64 @@ Final: 2.0.0 with all changes documented
 See references/workflows.md for details
 ```
 
-## Pre-Release Versions
+## ⚠️ Critical Rules (Don't Violate These)
 
-Use format `X.Y.Z-IDENTIFIER` for testing before stable release:
+**Violating these rules breaks team coordination and creates confusing git history. Follow them strictly.**
 
-- `2.0.0-alpha.1` — Early testing
-- `2.0.0-beta.1` — More stable
-- `2.0.0-rc.1` — Release candidate
-- `2.0.0` — Stable
+### Rule 1: One Version Bump Per Release Cycle
 
-## Critical Rules (Don't Violate These)
+**What:** Bump once, commit once. Don't chain bumps (1.0.1 → 1.0.2 → 1.1.0).
 
-| Rule | Why | Example |
-|------|-----|---------|
-| **One bump per cycle** | Prevents version thrashing | Don't go 1.0.1 → 1.0.2 → 1.1.0 in same release |
-| **Never amend releases** | Clear git history for teams | Create new commit if you forgot a file |
-| **Don't document version bumps** | Changelogs are for users, not admins | ❌ "Bumped to 1.2.3" ✅ "Fixed timeout bug" |
-| **Verify against git diff** | Don't document from memory | Run `git diff` before writing CHANGELOG |
-| **Parent ≥ child versions** | Prevents version confusion | If child is 1.1.0, parent must be ≥1.1.0 |
+**Why:** Prevents version thrashing. One release = one version = one git commit.
+
+**Consequence:** Multiple bumps create confusing git history and version confusion. Teams don't know which version is deployed.
+
+---
+
+### Rule 2: Never Amend Releases After Commit
+
+**What:** If you realize you missed a file AFTER committing, create a NEW commit (never use `git commit --amend`).
+
+**Why:** Clear git history for teams. Amended commits are confusing in shared repositories.
+
+**Consequence:** Amended releases hide what actually happened. Other team members pull old versions. Deploy failures.
+
+---
+
+### Rule 3: Never Document Version Bumps in CHANGELOG
+
+**What:** CHANGELOG documents changes to users, not version management.
+
+**Why:** Changelogs are for users to understand impact. Version numbers are metadata.
+
+**Consequence:** Confusing changelogs that waste users' time. Example of what NOT to write:
+- ❌ "Bumped to 1.2.3"
+- ❌ "Updated version from 1.0.0 to 1.1.0"
+- ❌ "skill-x: 1.0.0 → 1.0.1"
+
+**Write instead:**
+- ✅ "Fixed timeout bug in API requests"
+- ✅ "Added support for encrypted documents"
+
+---
+
+### Rule 4: Verify Changes Against git diff
+
+**What:** Don't document from memory. Run `git diff` and only document what's actually there.
+
+**Why:** Prevents documenting changes that don't exist or forgetting actual changes.
+
+**Consequence:** Users read about changes that don't exist in their code. Credibility destroyed.
+
+---
+
+### Rule 5: Parent Version ≥ Highest Child Version
+
+**What:** In multi-component projects, parent version must be ≥ every child version.
+
+**Why:** Prevents version confusion. If parent is 1.2.0 but child is 1.3.0, nobody knows which version controls what.
+
+**Consequence:** Version confusion across teams. Deployments fail. Coordination breaks down.
 
 ## When to Use References
 
