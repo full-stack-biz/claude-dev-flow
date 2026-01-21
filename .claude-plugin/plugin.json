@@ -5,8 +5,8 @@
   "author": {
     "name": "full-stack.biz"
   },
-  "homepage": "https://github.com/yourusername/dev-flow",
-  "repository": "https://github.com/yourusername/dev-flow.git",
+  "homepage": "https://github.com/full-stack-biz/claude-dev-flow",
+  "repository": "https://github.com/full-stack-biz/claude-dev-flow.git",
   "license": "MIT",
   "keywords": ["release", "versioning", "semantic-versioning", "changelog", "versioning-strategy", "monorepo", "multi-component"]
 }

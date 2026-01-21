@@ -23,10 +23,16 @@ The **release-process** skill guides you through:
 claude plugin install dev-flow@marketplace
 ```
 
-Or for development:
+Or install from GitHub:
 
 ```bash
-claude --plugin-dir /path/to/dev-flow
+claude plugin install full-stack-biz/claude-dev-flow
+```
+
+For local development:
+
+```bash
+claude --plugin-dir /path/to/claude-dev-flow
 ```
 
 ## Quick Start
