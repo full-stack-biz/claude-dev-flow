@@ -114,10 +114,10 @@ Example: If plugin has skill-a and skill-b, and skill-a gets a minor update (1.0
 
 ### Git Practices
 
-- Do not commit anything without operator request (per global CLAUDE.md instructions)
-- When committing releases, use descriptive messages that match the changelog
-- Tag releases with format: `vX.Y.Z`
-- Ensure changelog is committed with version files in same commit
+- **NEVER commit anything.** Wait for explicit operator request for each commit.
+- When operator requests a commit, use descriptive messages that match the changelog
+- Tag releases with format: `vX.Y.Z` (only on operator request)
+- Ensure changelog is committed with version files in same commit (only on operator request)
 
 ### Content Style
 

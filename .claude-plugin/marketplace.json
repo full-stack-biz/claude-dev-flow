@@ -7,7 +7,7 @@
     {
       "name": "dev-flow",
       "source": "./",
-      "description": "Manage project releases and versioning using semantic versioning with bracket-based freezing. Use when planning releases, bumping versions, managing changelogs, or coordinating multi-component project versions."
+      "description": "Complete release and git workflow management. Semantic versioning, branch strategies, and conflict resolution. Use for releases, version management, git-flow setup, or resolving rebase conflicts."
     }
   ]
 }
