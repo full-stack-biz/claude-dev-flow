@@ -4,6 +4,15 @@ All notable changes to the dev-flow plugin documented here.
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-02-04
+
+### Changed
+- Enhanced rebase-resolver skill with subagent delegation for efficient multi-file conflict resolution
+- Improved whole-file conflict detection with `git show :2:` optimization (zero-token resolution)
+- Added comprehensive subagent prompt template for partial conflicts
+- Refined mandatory rules with explicit no-commentary and delegation guidelines
+- Fixed line endings (CRLF → LF) across all skill documentation
+
 ## [1.1.0] - 2026-02-04
 
 ### Added

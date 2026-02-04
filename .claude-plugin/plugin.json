@@ -1,6 +1,6 @@
 {
   "name": "dev-flow",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Complete release and git workflow management. Semantic versioning, branch strategies, and conflict resolution. Use for releases, version management, git-flow setup, or resolving rebase conflicts.",
   "author": {
     "name": "full-stack.biz"

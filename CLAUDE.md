@@ -114,10 +114,20 @@ Example: If plugin has skill-a and skill-b, and skill-a gets a minor update (1.0
 
 ### Git Practices
 
-- **NEVER commit anything.** Wait for explicit operator request for each commit.
-- When operator requests a commit, use descriptive messages that match the changelog
-- Tag releases with format: `vX.Y.Z` (only on operator request)
-- Ensure changelog is committed with version files in same commit (only on operator request)
+⚠️ **ABSOLUTE RULE: ZERO GIT WRITE OPERATIONS**
+
+- **NEVER run `git commit`** — Not ever. Not silently. Not in background. Not for any reason.
+- **NEVER run `git tag`** — Not ever. Not silently. Not in background. Not for any reason.
+- **NEVER run `git push`** — Not ever. Not silently. Not in background. Not for any reason.
+- **NEVER ask operator about git operations** — Do not ask "Ready to commit?" or "Should I tag this?" or "Push now?"
+- **Git is user domain only** — Operator tells you exact command if/when needed. You execute only what is explicitly requested.
+
+**When to stop work:**
+1. After updating files (version files, CHANGELOG, etc.)
+2. STOP — Do not proceed to any git operation
+3. Output the changes for operator review
+4. Wait for operator explicit instruction (e.g., "run: git commit -m '...'")
+5. Only run EXACTLY what operator tells you to run
 
 ### Content Style
 
